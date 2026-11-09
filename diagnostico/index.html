@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Diagnóstico gratuito — Tráfego Juris</title>
-<meta name="description" content="Responda 5 perguntas rápidas e receba um diagnóstico gratuito de anúncios no Instagram para o seu escritório de advocacia.">
+<title>Método Tráfego Juris</title>
+<meta name="description" content="Responda 5 perguntas rápidas para conhecermos o seu escritório e traçarmos juntos uma meta para alcançar mais clientes.">
 <meta name="theme-color" content="#072A9B">
 <link rel="icon" href="../assets/img/logo-01.svg" type="image/svg+xml">
 <style>
@@ -144,9 +144,9 @@ h1 em { font-style: normal; color: var(--vivid); }
   <section class="step intro is-on" data-step="0">
     <img class="photo" src="../assets/img/hero.jpg" alt="Advogado sorrindo ao ler uma mensagem no celular" width="1600" height="1067">
     <p class="kicker" id="greet">Olá, doutor(a).</p>
-    <h1>Descubra quantos clientes o seu escritório pode alcançar <em>no Instagram.</em></h1>
-    <p class="lead">Responda <b>5 perguntas rápidas</b> e receba um diagnóstico gratuito de anúncios para a sua área e a sua cidade.</p>
-    <button class="btn" type="button" data-next>Começar diagnóstico
+    <h1>Mais clientes para o seu escritório, com o <em>método Tráfego Juris.</em></h1>
+    <p class="lead">Responda <b>5 perguntas rápidas</b> para a gente conhecer o seu escritório e traçar, junto com você, uma meta de crescimento.</p>
+    <button class="btn" type="button" data-next>Vamos começar
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
     <ul class="trust">
       <li>Leva menos de 1 minuto</li>
@@ -193,7 +193,7 @@ h1 em { font-style: normal; color: var(--vivid); }
   <!-- 5 · Contato -->
   <section class="step" data-step="5">
     <p class="kicker">Etapa 5 de 5</p>
-    <h2>Último passo. Para quem é o diagnóstico?</h2>
+    <h2>Último passo. Conte um pouco sobre você.</h2>
     <form id="form" novalidate>
       <div class="field">
         <label for="nome">Seu nome</label>
@@ -205,7 +205,7 @@ h1 em { font-style: normal; color: var(--vivid); }
         <input id="cidade" name="cidade" type="text" autocomplete="address-level2" placeholder="Curitiba, PR" required>
         <span class="err" id="err-cidade"></span>
       </div>
-      <p class="safe"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Usamos seus dados só para conversar sobre o seu diagnóstico.</p>
+      <p class="safe"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Usamos seus dados só para conversar com você sobre a sua meta.</p>
       <button class="btn btn--wa" type="submit" id="send">Fale agora com a gente
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
     </form>
@@ -301,14 +301,14 @@ document.getElementById("form").addEventListener("submit", (e) => {
 
   // Mensagem pronta no WhatsApp com as respostas do quiz
   const msg = [
-    `Olá! Sou ${lead.nome}, de ${lead.cidade}. Fiz o diagnóstico no site da Tráfego Juris.`,
+    `Olá! Sou ${lead.nome}, de ${lead.cidade}. Respondi o questionário no site da Tráfego Juris.`,
     "",
     `Área: ${answers.area || "-"}`,
     `Maior desafio: ${answers.desafio || "-"}`,
     `Quem atende: ${answers.atendimento || "-"}`,
     `Investimento em anúncios: ${answers.investimento || "-"}`,
     "",
-    "Quero receber meu diagnóstico.",
+    "Quero conversar sobre a meta do meu escritório.",
   ].join("\n");
   const waUrl = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
 
