@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Diagnóstico gratuito — Tráfego Juris</title>
+<meta name="description" content="Responda 5 perguntas rápidas e receba um diagnóstico gratuito de anúncios no Instagram para o seu escritório de advocacia.">
+<meta name="theme-color" content="#072A9B">
+<link rel="icon" href="../assets/img/logo-01.svg" type="image/svg+xml">
+<style>
+@font-face { font-family: "Blinker"; src: url("../assets/fonts/Blinker-Regular.ttf") format("truetype"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Blinker"; src: url("../assets/fonts/Blinker-SemiBold.ttf") format("truetype"); font-weight: 600; font-display: swap; }
+
+/* Mesmas cores e fonte do site (assets/style.css) */
+:root {
+  --blue: #072A9B; --blue-deep: #051B66; --vivid: #2350E6; --mist: #E7ECFA; --paper: #F6F7FB;
+  --ink: #101734; --muted: #5E6580; --line: #D5DBEC; --signal: #FFD54A; --w: #FFFFFF;
+  --f: "Blinker", "Segoe UI", system-ui, sans-serif;
+  --skew: -14deg;
+  --col: 560px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; }
+body { min-height: 100vh; min-height: 100dvh; background: var(--paper); color: var(--ink); font-family: var(--f); font-size: 18px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+img { display: block; max-width: 100%; }
+button, input { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--signal); outline-offset: 3px; border-radius: 6px; }
+
+/* Barra de progresso */
+.progress { position: fixed; inset: 0 0 auto; height: 5px; background: var(--mist); z-index: 10; }
+.progress span { display: block; height: 100%; width: 0; background: var(--vivid); border-radius: 0 3px 3px 0; transition: width .5s cubic-bezier(.2,.8,.3,1); }
+
+/* Coluna */
+.wrap { max-width: var(--col); margin: 0 auto; padding: 28px 20px 48px; position: relative; }
+.top { display: flex; justify-content: center; padding: 6px 0 20px; }
+.top img { width: 132px; height: auto; }
+/* hastes inclinadas do TJ, discretas no canto */
+.bars { position: absolute; right: -50px; top: -40px; width: 150px; height: 150px; pointer-events: none; z-index: 0; }
+.bars::before, .bars::after { content: ""; position: absolute; top: 0; height: 100%; transform: skewX(var(--skew)); border-radius: 0 0 12px 12px; }
+.bars::before { right: 30px; width: 70px; background: var(--blue); opacity: .9; }
+.bars::after { right: 120px; width: 24px; background: var(--mist); }
+
+/* Etapas */
+.step { display: none; position: relative; z-index: 1; }
+.step.is-on { display: block; animation: enter .45s cubic-bezier(.2,.8,.3,1) both; }
+.step.is-back { animation-name: enterBack; }
+@keyframes enter { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+@keyframes enterBack { from { opacity: 0; transform: translateY(-14px); } to { opacity: 1; transform: none; } }
+
+.photo { width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 20px; background: var(--mist); margin-bottom: 26px; box-shadow: 0 24px 40px -28px rgba(7, 42, 155, .45); }
+.kicker { font-size: 17px; font-weight: 600; color: var(--vivid); margin-bottom: 8px; }
+h1, h2 { font-weight: 600; color: var(--blue-deep); letter-spacing: -0.01em; line-height: 1.08; text-wrap: balance; }
+h1 { font-size: clamp(34px, 8.6vw, 46px); }
+h2 { font-size: clamp(27px, 6.8vw, 34px); margin-bottom: 22px; }
+h1 em { font-style: normal; color: var(--vivid); }
+.lead { margin-top: 16px; font-size: 20px; color: var(--muted); text-wrap: pretty; }
+.lead b { color: var(--ink); font-weight: 600; }
+
+/* Opções */
+.options { display: grid; gap: 12px; }
+.opt {
+  display: flex; align-items: center; gap: 16px; width: 100%; text-align: left; cursor: pointer;
+  background: var(--w); border: 2px solid var(--line); border-radius: 16px; padding: 18px 18px 18px 20px;
+  font-size: 19px; font-weight: 600; color: var(--ink); line-height: 1.25;
+  transition: border-color .2s, background-color .2s, transform .15s;
+}
+.opt::before { content: ""; flex: none; width: 10px; height: 22px; border-radius: 2px; background: var(--vivid); transform: skewX(var(--skew)); }
+.opt .txt { flex: 1; }
+.opt .txt small { display: block; margin-top: 2px; font-size: 16px; font-weight: 400; color: var(--muted); }
+.opt .dot { flex: none; width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--line); display: grid; place-items: center; transition: border-color .2s, background-color .2s; }
+.opt:hover { border-color: #AFC0EE; }
+.opt:active { transform: scale(.99); }
+.opt[aria-checked="true"] { border-color: var(--vivid); background: var(--mist); }
+.opt[aria-checked="true"] .dot { border-color: var(--vivid); background: var(--vivid); }
+.opt[aria-checked="true"] .dot::after { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--w); }
+.options--grid { grid-template-columns: 1fr 1fr; }
+.options--grid .opt { padding: 16px 14px 16px 16px; font-size: 18px; gap: 12px; }
+@media (max-width: 380px) { .options--grid { grid-template-columns: 1fr; } }
+
+/* Botões */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 12px; width: 100%;
+  border: 0; border-radius: 14px; padding: 20px 24px; cursor: pointer;
+  background: var(--blue); color: var(--w); font-size: 21px; font-weight: 600; text-decoration: none;
+  transition: background-color .2s, transform .15s;
+}
+.btn:hover { background: var(--blue-deep); }
+.btn:active { transform: translateY(1px); }
+.btn svg { width: 22px; height: 22px; }
+.btn[disabled] { opacity: .5; cursor: not-allowed; }
+.back { display: block; margin: 22px auto 0; background: none; border: 0; cursor: pointer; color: var(--muted); font-size: 17px; padding: 8px 12px; }
+.back:hover { color: var(--blue); }
+
+/* Abertura */
+.intro .btn { margin-top: 28px; }
+.trust { margin-top: 22px; padding-top: 20px; border-top: 1px solid var(--line); display: grid; gap: 8px; font-size: 16px; color: var(--muted); }
+.trust li { list-style: none; display: flex; align-items: center; gap: 10px; }
+.trust li::before { content: ""; width: 8px; height: 16px; border-radius: 2px; background: var(--blue); transform: skewX(var(--skew)); flex: none; }
+
+/* Formulário */
+.field { display: grid; gap: 8px; margin-bottom: 18px; }
+.field label { font-size: 16px; font-weight: 600; color: var(--muted); }
+.field input {
+  width: 100%; background: var(--w); border: 2px solid var(--line); border-radius: 14px; padding: 18px;
+  font-size: 20px; color: var(--ink); outline: none; transition: border-color .2s;
+}
+.field input::placeholder { color: #A3AAC4; }
+.field input:focus { border-color: var(--vivid); }
+.phone { display: flex; align-items: center; background: var(--w); border: 2px solid var(--line); border-radius: 14px; transition: border-color .2s; }
+.phone:focus-within { border-color: var(--vivid); }
+.phone span { padding-left: 18px; font-size: 20px; font-weight: 600; color: var(--muted); }
+.phone input { border: 0; padding-left: 10px; }
+.field .err { font-size: 15px; color: #C2413B; min-height: 1em; }
+.safe { display: flex; align-items: center; gap: 8px; font-size: 15px; color: var(--muted); margin: 4px 0 18px; }
+.safe svg { width: 18px; height: 18px; flex: none; }
+
+/* Fim */
+.done { text-align: center; }
+.done .check { width: 84px; height: 84px; margin: 20px auto 22px; border-radius: 50%; background: var(--vivid); display: grid; place-items: center; }
+.done .check svg { width: 42px; height: 42px; }
+.done .lead { margin-bottom: 28px; }
+
+@media (min-width: 720px) {
+  .wrap { padding-top: 48px; }
+  .bars { position: fixed; right: 6%; width: 180px; height: 360px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="progress" aria-hidden="true"><span id="bar"></span></div>
+<div class="bars" aria-hidden="true"></div>
+
+<main class="wrap">
+  <header class="top"><a href="../" aria-label="Tráfego Juris, ir para o site"><img src="../assets/img/logo-01.svg" alt="Tráfego Juris" width="132" height="50"></a></header>
+
+  <!-- 0 · Abertura -->
+  <section class="step intro is-on" data-step="0">
+    <img class="photo" src="../assets/img/hero.jpg" alt="Advogado sorrindo ao ler uma mensagem no celular" width="1600" height="1067">
+    <p class="kicker" id="greet">Olá, doutor(a).</p>
+    <h1>Descubra quantos clientes o seu escritório pode alcançar <em>no Instagram.</em></h1>
+    <p class="lead">Responda <b>5 perguntas rápidas</b> e receba um diagnóstico gratuito de anúncios para a sua área e a sua cidade.</p>
+    <button class="btn" type="button" data-next>Começar diagnóstico
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+    <ul class="trust">
+      <li>Leva menos de 1 minuto</li>
+      <li>Campanhas dentro das regras da OAB</li>
+      <li>Atendemos escritórios de todo o Brasil</li>
+    </ul>
+  </section>
+
+  <!-- 1 · Área -->
+  <section class="step" data-step="1" data-key="area">
+    <p class="kicker">Etapa 1 de 5</p>
+    <h2>Qual é a principal área de atuação do escritório?</h2>
+    <div class="options options--grid" role="radiogroup" aria-label="Área de atuação"></div>
+    <button class="back" type="button" data-back>← Voltar</button>
+  </section>
+
+  <!-- 2 · Desafio -->
+  <section class="step" data-step="2" data-key="desafio">
+    <img class="photo" src="../assets/img/problema.jpg" alt="Advogado preocupado ao telefone" width="1600" height="1067">
+    <p class="kicker">Etapa 2 de 5</p>
+    <h2>Qual é o maior desafio do escritório hoje?</h2>
+    <div class="options" role="radiogroup" aria-label="Maior desafio"></div>
+    <button class="back" type="button" data-back>← Voltar</button>
+  </section>
+
+  <!-- 3 · Atendimento -->
+  <section class="step" data-step="3" data-key="atendimento">
+    <img class="photo" src="../assets/img/atendimento.jpg" alt="Advogada atendendo uma cliente" width="1600" height="1067">
+    <p class="kicker">Etapa 3 de 5</p>
+    <h2>Quem vai atender os novos contatos que chegarem pelo WhatsApp?</h2>
+    <div class="options" role="radiogroup" aria-label="Quem atende"></div>
+    <button class="back" type="button" data-back>← Voltar</button>
+  </section>
+
+  <!-- 4 · Investimento -->
+  <section class="step" data-step="4" data-key="investimento">
+    <img class="photo" src="../assets/img/video.jpg" alt="Especialista em uma chamada de vídeo" width="1600" height="1067">
+    <p class="kicker">Etapa 4 de 5</p>
+    <h2>Quanto o escritório pode investir por mês em anúncios, sem contar a gestão?</h2>
+    <div class="options" role="radiogroup" aria-label="Investimento mensal em anúncios"></div>
+    <button class="back" type="button" data-back>← Voltar</button>
+  </section>
+
+  <!-- 5 · Contato -->
+  <section class="step" data-step="5">
+    <p class="kicker">Etapa 5 de 5</p>
+    <h2>Último passo. Para onde enviamos o seu diagnóstico?</h2>
+    <form id="form" novalidate>
+      <div class="field">
+        <label for="nome">Seu nome</label>
+        <input id="nome" name="nome" type="text" autocomplete="name" placeholder="Dra. Ana Souza" required>
+        <span class="err" id="err-nome"></span>
+      </div>
+      <div class="field">
+        <label for="whats">WhatsApp</label>
+        <div class="phone"><span>+55</span><input id="whats" name="whats" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="(11) 99999-9999" required></div>
+        <span class="err" id="err-whats"></span>
+      </div>
+      <div class="field">
+        <label for="cidade">Cidade e estado do escritório</label>
+        <input id="cidade" name="cidade" type="text" autocomplete="address-level2" placeholder="Curitiba, PR" required>
+        <span class="err" id="err-cidade"></span>
+      </div>
+      <p class="safe"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Usamos seus dados só para enviar o diagnóstico.</p>
+      <button class="btn" type="submit" id="send">Quero meu diagnóstico
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+    </form>
+    <button class="back" type="button" data-back>← Voltar</button>
+  </section>
+
+  <!-- 6 · Fim -->
+  <section class="step done" data-step="6">
+    <div class="check"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
+    <h2 id="done-title">Pronto!</h2>
+    <p class="lead" id="done-text">Obrigado pelas respostas. Agora conheça como a Tráfego Juris trabalha.</p>
+    <a class="btn" id="to-site" href="../">Conhecer a Tráfego Juris
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+  </section>
+</main>
+
+<script>
+// ===== Configuração =====
+// Para onde o botão final leva: o site da Tráfego Juris.
+const SITE_URL = "../";
+// Para onde vão as respostas (Google Planilhas via Apps Script, Formspree, CRM...).
+// Enquanto estiver vazio, as respostas NÃO são salvas em lugar nenhum.
+const LEAD_ENDPOINT = "https://script.google.com/macros/s/AKfycbwpUTADCEGY67j35GkOzN_wQrlCesWlPKS736ASuuKDE-kk_YdPCk0fCTbrKU7n2iy2zw/exec";
+
+const QUESTIONS = {
+  area: ["Previdenciário", "Trabalhista", "Família", "Criminal", "Bancário e consumidor", "Saúde", "Imobiliário", "Tributário e empresarial", "Outra área"],
+  desafio: [
+    ["Dependo principalmente de indicações", "Tem mês cheio e mês parado"],
+    ["Já impulsionei posts, mas não vieram clientes", "Ganhei curtidas, não conversas"],
+    ["Recebo contatos, mas poucos viram contratos", "Falta qualificar quem chega"],
+    ["Quero crescer com previsibilidade", "Já tenho processo e quero escalar"],
+  ],
+  atendimento: [["Eu mesmo(a)"], ["Meu sócio ou outro advogado"], ["Secretária, estagiário ou equipe"]],
+  investimento: [["Até R$ 1.000 por mês"], ["De R$ 1.000 a R$ 2.000 por mês"], ["Acima de R$ 2.000 por mês"], ["Ainda não sei, quero orientação"]],
+};
+
+const steps = [...document.querySelectorAll(".step")];
+const bar = document.getElementById("bar");
+const answers = {};
+let current = 0;
+
+// Saudação pelo horário
+const h = new Date().getHours();
+document.getElementById("greet").textContent = (h < 12 ? "Bom dia" : h < 18 ? "Boa tarde" : "Boa noite") + ", doutor(a).";
+
+// Monta as opções
+steps.forEach((s) => {
+  const key = s.dataset.key; if (!key) return;
+  const box = s.querySelector(".options");
+  QUESTIONS[key].forEach((o) => {
+    const [label, hint] = Array.isArray(o) ? o : [o];
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "opt"; b.setAttribute("role", "radio"); b.setAttribute("aria-checked", "false");
+    b.innerHTML = `<span class="txt"></span><span class="dot" aria-hidden="true"></span>`;
+    b.querySelector(".txt").textContent = label;
+    if (hint) { const sm = document.createElement("small"); sm.textContent = hint; b.querySelector(".txt").appendChild(sm); }
+    b.addEventListener("click", () => {
+      box.querySelectorAll(".opt").forEach((x) => x.setAttribute("aria-checked", "false"));
+      b.setAttribute("aria-checked", "true");
+      answers[key] = label;
+      setTimeout(() => go(current + 1), 320);   // avança sozinho, depois de mostrar a escolha
+    });
+    box.appendChild(b);
+  });
+});
+
+function go(n, back = false) {
+  steps[current].classList.remove("is-on", "is-back");
+  current = Math.max(0, Math.min(steps.length - 1, n));
+  const s = steps[current];
+  s.classList.add("is-on"); s.classList.toggle("is-back", back);
+  bar.style.width = (Math.min(current, 5) / 5) * 100 + "%";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  const focusable = s.querySelector("h1, h2");
+  if (focusable) { focusable.setAttribute("tabindex", "-1"); focusable.focus({ preventScroll: true }); }
+}
+document.querySelectorAll("[data-next]").forEach((b) => b.addEventListener("click", () => go(current + 1)));
+document.querySelectorAll("[data-back]").forEach((b) => b.addEventListener("click", () => go(current - 1, true)));
+
+// Máscara do WhatsApp: (11) 99999-9999
+const whats = document.getElementById("whats");
+whats.addEventListener("input", () => {
+  const d = whats.value.replace(/\D/g, "").slice(0, 11);
+  let v = d;
+  if (d.length > 2) v = `(${d.slice(0, 2)}) ${d.slice(2)}`;
+  if (d.length > 7) v = `(${d.slice(0, 2)}) ${d.slice(2, d.length - 4)}-${d.slice(-4)}`;
+  whats.value = v;
+});
+
+document.getElementById("form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const nome = document.getElementById("nome"), cidade = document.getElementById("cidade");
+  const digits = whats.value.replace(/\D/g, "");
+  const errs = {
+    nome: nome.value.trim().length < 2 ? "Escreva seu nome." : "",
+    whats: digits.length < 10 ? "Confira o número com DDD." : "",
+    cidade: cidade.value.trim().length < 2 ? "Escreva a cidade e o estado." : "",
+  };
+  Object.entries(errs).forEach(([k, m]) => { document.getElementById("err-" + k).textContent = m; });
+  const first = Object.keys(errs).find((k) => errs[k]);
+  if (first) { (first === "whats" ? whats : document.getElementById(first)).focus(); return; }
+
+  const lead = { ...answers, nome: nome.value.trim(), whatsapp: "+55" + digits, cidade: cidade.value.trim(), pagina: location.href.split("?")[0] };
+  const btn = document.getElementById("send");
+  btn.disabled = true;
+  if (LEAD_ENDPOINT) {
+    try {
+      await fetch(LEAD_ENDPOINT, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(lead) });
+    } catch (_) { /* segue para a tela final mesmo se a rede falhar */ }
+  }
+  btn.disabled = false;
+  document.getElementById("done-title").textContent = `Pronto, ${lead.nome.split(" ")[0]}!`;
+  // só diz que recebeu quando as respostas de fato foram enviadas para algum lugar
+  if (LEAD_ENDPOINT) document.getElementById("done-text").textContent = "Recebemos suas respostas. Enquanto preparamos o seu diagnóstico, conheça como a Tráfego Juris trabalha.";
+  document.getElementById("to-site").href = SITE_URL;
+  go(6);
+});
+</script>
+</body>
+</html>
