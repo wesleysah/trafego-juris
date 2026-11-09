@@ -23,7 +23,9 @@ Troque os dados provisórios:
 
 ## Publicação (Hostinger)
 
-O branch `site` tem só o conteúdo da pasta `SITE/` na raiz. É ele que a Hostinger publica.
+No ar em **https://trafegojuris.dablioagencia.com** (Hostinger, deploy automático pelo GitHub).
+
+O branch `site` tem só o conteúdo da pasta `SITE/` na raiz. A Hostinger publica esse branch sozinha a cada push.
 Depois de alterar o site no `main`, atualize o branch `site` com:
 
 ```
