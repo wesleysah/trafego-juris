@@ -17,8 +17,9 @@ function doPost(e) {
     const limpo = {};
     CAMPOS.forEach((c) => { limpo[c] = seguro(dados[c]); });
 
-    // Ignora envios sem nome ou sem WhatsApp (robôs, testes vazios)
-    if (!limpo.nome || limpo.whatsapp.replace(/\D/g, '').length < 12) return resposta('ignorado');
+    // Ignora envios sem nome ou sem cidade (robôs, testes vazios).
+    // O telefone não vem mais do quiz: a conversa abre no WhatsApp e o número aparece lá.
+    if (limpo.nome.length < 2 || limpo.cidade.length < 2) return resposta('ignorado');
 
     const aba = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
     aba.appendRow([

@@ -193,17 +193,12 @@ h1 em { font-style: normal; color: var(--vivid); }
   <!-- 5 · Contato -->
   <section class="step" data-step="5">
     <p class="kicker">Etapa 5 de 5</p>
-    <h2>Último passo. Como falamos com você?</h2>
+    <h2>Último passo. Para quem é o diagnóstico?</h2>
     <form id="form" novalidate>
       <div class="field">
         <label for="nome">Seu nome</label>
         <input id="nome" name="nome" type="text" autocomplete="name" placeholder="Dra. Ana Souza" required>
         <span class="err" id="err-nome"></span>
-      </div>
-      <div class="field">
-        <label for="whats">WhatsApp</label>
-        <div class="phone"><span>+55</span><input id="whats" name="whats" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="(11) 99999-9999" required></div>
-        <span class="err" id="err-whats"></span>
       </div>
       <div class="field">
         <label for="cidade">Cidade e estado do escritório</label>
@@ -292,30 +287,19 @@ function go(n, back = false) {
 document.querySelectorAll("[data-next]").forEach((b) => b.addEventListener("click", () => go(current + 1)));
 document.querySelectorAll("[data-back]").forEach((b) => b.addEventListener("click", () => go(current - 1, true)));
 
-// Máscara do WhatsApp: (11) 99999-9999
-const whats = document.getElementById("whats");
-whats.addEventListener("input", () => {
-  const d = whats.value.replace(/\D/g, "").slice(0, 11);
-  let v = d;
-  if (d.length > 2) v = `(${d.slice(0, 2)}) ${d.slice(2)}`;
-  if (d.length > 7) v = `(${d.slice(0, 2)}) ${d.slice(2, d.length - 4)}-${d.slice(-4)}`;
-  whats.value = v;
-});
-
+// O telefone não é pedido: ao tocar no botão, a conversa abre no WhatsApp da pessoa e o número aparece lá.
 document.getElementById("form").addEventListener("submit", async (e) => {
   e.preventDefault();
   const nome = document.getElementById("nome"), cidade = document.getElementById("cidade");
-  const digits = whats.value.replace(/\D/g, "");
   const errs = {
     nome: nome.value.trim().length < 2 ? "Escreva seu nome." : "",
-    whats: digits.length < 10 ? "Confira o número com DDD." : "",
     cidade: cidade.value.trim().length < 2 ? "Escreva a cidade e o estado." : "",
   };
   Object.entries(errs).forEach(([k, m]) => { document.getElementById("err-" + k).textContent = m; });
   const first = Object.keys(errs).find((k) => errs[k]);
-  if (first) { (first === "whats" ? whats : document.getElementById(first)).focus(); return; }
+  if (first) { document.getElementById(first).focus(); return; }
 
-  const lead = { ...answers, nome: nome.value.trim(), whatsapp: "+55" + digits, cidade: cidade.value.trim(), pagina: location.href.split("?")[0] };
+  const lead = { ...answers, nome: nome.value.trim(), cidade: cidade.value.trim(), pagina: location.href.split("?")[0] };
   const btn = document.getElementById("send");
   btn.disabled = true;
   if (LEAD_ENDPOINT) {
