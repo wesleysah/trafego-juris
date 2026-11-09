@@ -21,6 +21,15 @@ Troque os dados provisórios:
 - **WhatsApp:** `SITE/assets/script.js`, constante `WHATSAPP` (só dígitos, com 55 + DDD).
 - **Instagram, e-mail e CNPJ:** rodapé de `SITE/index.html`.
 
+## Publicação (Hostinger)
+
+O branch `site` tem só o conteúdo da pasta `SITE/` na raiz. É ele que a Hostinger publica.
+Depois de alterar o site no `main`, atualize o branch `site` com:
+
+```
+git subtree push --prefix SITE origin site
+```
+
 ## Ver localmente
 
 Abra `SITE/index.html` no navegador.
