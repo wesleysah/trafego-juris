@@ -32,6 +32,8 @@ Depois de alterar o site no `main`, atualize o branch `site` com:
 git subtree push --prefix SITE origin site
 ```
 
+**Cache:** a Hostinger guarda CSS e JS no navegador por 7 dias. Ao mudar `style.css` ou `script.js`, aumente o número em `?v=` no `SITE/index.html` (ex.: `?v=2` → `?v=3`), senão quem já visitou continua vendo a versão antiga.
+
 ## Ver localmente
 
 Abra `SITE/index.html` no navegador.
