@@ -1,0 +1,12 @@
+# Configuração local do Claude Code
+.claude/
+
+# Fotos originais licenciadas do Shutterstock (ficam só no Drive;
+# a licença não permite redistribuir os arquivos num repositório público)
+FOTOS/
+
+# Sistema
+desktop.ini
+Thumbs.db
+.DS_Store
+*.tmp
