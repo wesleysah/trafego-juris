@@ -228,9 +228,7 @@ h1 em { font-style: normal; color: var(--vivid); }
 // WhatsApp da Tráfego Juris que recebe a conversa (só dígitos: 55 + DDD + número).
 // PROVISÓRIO: troque pelo número real (o mesmo de assets/script.js do site).
 const WHATSAPP = "5500000000000";
-// Para onde vão as respostas (Google Planilhas via Apps Script, Formspree, CRM...).
-// Enquanto estiver vazio, as respostas NÃO são salvas em lugar nenhum.
-const LEAD_ENDPOINT = "https://script.google.com/macros/s/AKfycbwpUTADCEGY67j35GkOzN_wQrlCesWlPKS736ASuuKDE-kk_YdPCk0fCTbrKU7n2iy2zw/exec";
+// As respostas não são salvas em lugar nenhum: elas vão só na mensagem do WhatsApp.
 
 const QUESTIONS = {
   area: ["Previdenciário", "Trabalhista", "Família", "Criminal", "Bancário e consumidor", "Saúde", "Imobiliário", "Tributário e empresarial", "Outra área"],
@@ -288,7 +286,7 @@ document.querySelectorAll("[data-next]").forEach((b) => b.addEventListener("clic
 document.querySelectorAll("[data-back]").forEach((b) => b.addEventListener("click", () => go(current - 1, true)));
 
 // O telefone não é pedido: ao tocar no botão, a conversa abre no WhatsApp da pessoa e o número aparece lá.
-document.getElementById("form").addEventListener("submit", async (e) => {
+document.getElementById("form").addEventListener("submit", (e) => {
   e.preventDefault();
   const nome = document.getElementById("nome"), cidade = document.getElementById("cidade");
   const errs = {
@@ -299,16 +297,7 @@ document.getElementById("form").addEventListener("submit", async (e) => {
   const first = Object.keys(errs).find((k) => errs[k]);
   if (first) { document.getElementById(first).focus(); return; }
 
-  const lead = { ...answers, nome: nome.value.trim(), cidade: cidade.value.trim(), pagina: location.href.split("?")[0] };
-  const btn = document.getElementById("send");
-  btn.disabled = true;
-  if (LEAD_ENDPOINT) {
-    try {
-      // keepalive: o envio termina mesmo que a página troque para o WhatsApp
-      await fetch(LEAD_ENDPOINT, { method: "POST", mode: "no-cors", keepalive: true, headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(lead) });
-    } catch (_) { /* segue para o WhatsApp mesmo se a planilha falhar */ }
-  }
-  btn.disabled = false;
+  const lead = { nome: nome.value.trim(), cidade: cidade.value.trim() };
 
   // Mensagem pronta no WhatsApp com as respostas do quiz
   const msg = [
