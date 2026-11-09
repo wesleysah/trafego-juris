@@ -73,6 +73,11 @@ h1 em { font-style: normal; color: var(--vivid); }
 .opt[aria-checked="true"] { border-color: var(--vivid); background: var(--mist); }
 .opt[aria-checked="true"] .dot { border-color: var(--vivid); background: var(--vivid); }
 .opt[aria-checked="true"] .dot::after { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--w); }
+/* várias respostas: caixinha quadrada com check, em vez de bolinha */
+.opt--multi .dot { border-radius: 7px; }
+.opt--multi[aria-checked="true"] .dot::after { width: 6px; height: 12px; border-radius: 0; background: none; border: solid var(--w); border-width: 0 3px 3px 0; transform: translateY(-1px) rotate(45deg); }
+.hint { margin: -12px 0 18px; font-size: 17px; color: var(--muted); }
+.btn--next { margin-top: 20px; }
 .options--grid { grid-template-columns: 1fr 1fr; }
 .options--grid .opt { padding: 16px 14px 16px 16px; font-size: 18px; gap: 12px; }
 @media (max-width: 380px) { .options--grid { grid-template-columns: 1fr; } }
@@ -156,28 +161,37 @@ h1 em { font-style: normal; color: var(--vivid); }
   </section>
 
   <!-- 1 · Área -->
-  <section class="step" data-step="1" data-key="area">
+  <section class="step" data-step="1" data-key="area" data-multi>
     <p class="kicker">Etapa 1 de 5</p>
-    <h2>Qual é a principal área de atuação do escritório?</h2>
-    <div class="options options--grid" role="radiogroup" aria-label="Área de atuação"></div>
+    <h2>Em quais áreas o escritório atua?</h2>
+    <p class="hint">Marque quantas quiser.</p>
+    <div class="options options--grid" role="group" aria-label="Áreas de atuação"></div>
+    <button class="btn btn--next" type="button" data-next data-continue disabled><span>Continuar</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
     <button class="back" type="button" data-back>← Voltar</button>
   </section>
 
-  <!-- 2 · Desafio -->
-  <section class="step" data-step="2" data-key="desafio">
+  <!-- 2 · Desafios -->
+  <section class="step" data-step="2" data-key="desafio" data-multi>
     <img class="photo" src="../assets/img/problema.jpg" alt="Advogado preocupado ao telefone" width="1600" height="1067">
     <p class="kicker">Etapa 2 de 5</p>
-    <h2>Qual é o maior desafio do escritório hoje?</h2>
-    <div class="options" role="radiogroup" aria-label="Maior desafio"></div>
+    <h2>Quais são os maiores desafios do escritório hoje?</h2>
+    <p class="hint">Marque quantos quiser.</p>
+    <div class="options" role="group" aria-label="Desafios do escritório"></div>
+    <button class="btn btn--next" type="button" data-next data-continue disabled><span>Continuar</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
     <button class="back" type="button" data-back>← Voltar</button>
   </section>
 
   <!-- 3 · Atendimento -->
-  <section class="step" data-step="3" data-key="atendimento">
+  <section class="step" data-step="3" data-key="atendimento" data-multi>
     <img class="photo" src="../assets/img/atendimento.jpg" alt="Advogada atendendo uma cliente" width="1600" height="1067">
     <p class="kicker">Etapa 3 de 5</p>
     <h2>Quem vai atender os novos contatos que chegarem pelo WhatsApp?</h2>
-    <div class="options" role="radiogroup" aria-label="Quem atende"></div>
+    <p class="hint">Marque quantos quiser.</p>
+    <div class="options" role="group" aria-label="Quem atende"></div>
+    <button class="btn btn--next" type="button" data-next data-continue disabled><span>Continuar</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
     <button class="back" type="button" data-back>← Voltar</button>
   </section>
 
@@ -251,18 +265,29 @@ let current = 0;
 const h = new Date().getHours();
 document.getElementById("greet").textContent = (h < 12 ? "Bom dia" : h < 18 ? "Boa tarde" : "Boa noite") + ", doutor(a).";
 
-// Monta as opções
+// Monta as opções. Etapas com data-multi aceitam várias respostas (e usam o botão Continuar);
+// as outras aceitam uma só e avançam sozinhas.
 steps.forEach((s) => {
   const key = s.dataset.key; if (!key) return;
   const box = s.querySelector(".options");
+  const multi = s.hasAttribute("data-multi");
+  const cont = s.querySelector("[data-continue]");
   QUESTIONS[key].forEach((o) => {
     const [label, hint] = Array.isArray(o) ? o : [o];
     const b = document.createElement("button");
-    b.type = "button"; b.className = "opt"; b.setAttribute("role", "radio"); b.setAttribute("aria-checked", "false");
+    b.type = "button"; b.className = "opt" + (multi ? " opt--multi" : "");
+    b.setAttribute("role", multi ? "checkbox" : "radio"); b.setAttribute("aria-checked", "false");
     b.innerHTML = `<span class="txt"></span><span class="dot" aria-hidden="true"></span>`;
     b.querySelector(".txt").textContent = label;
     if (hint) { const sm = document.createElement("small"); sm.textContent = hint; b.querySelector(".txt").appendChild(sm); }
     b.addEventListener("click", () => {
+      if (multi) {
+        b.setAttribute("aria-checked", b.getAttribute("aria-checked") === "true" ? "false" : "true");
+        const picked = [...box.querySelectorAll('.opt[aria-checked="true"] .txt')].map((x) => x.firstChild.textContent);
+        answers[key] = picked.join(", ");
+        cont.disabled = picked.length === 0;
+        return;
+      }
       box.querySelectorAll(".opt").forEach((x) => x.setAttribute("aria-checked", "false"));
       b.setAttribute("aria-checked", "true");
       answers[key] = label;
@@ -303,8 +328,8 @@ document.getElementById("form").addEventListener("submit", (e) => {
   const msg = [
     `Olá! Sou ${lead.nome}, de ${lead.cidade}. Respondi o questionário no site da Tráfego Juris.`,
     "",
-    `Área: ${answers.area || "-"}`,
-    `Maior desafio: ${answers.desafio || "-"}`,
+    `Áreas: ${answers.area || "-"}`,
+    `Desafios: ${answers.desafio || "-"}`,
     `Quem atende: ${answers.atendimento || "-"}`,
     `Investimento em anúncios: ${answers.investimento || "-"}`,
     "",
